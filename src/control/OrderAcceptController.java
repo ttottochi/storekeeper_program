@@ -68,5 +68,13 @@ public class OrderAcceptController {
         outputStream.write(header.getBytes());
         outputStream.write(outBody);
 
+        //결과 받기
+        Header result_header = Header.readHeader(inputStream);
+        byte[] result_body = new byte[result_header.length];
+        if(result_header.code == Header.CODE_SUCCESS)
+            System.out.println("주문을 처리하는데 성공하였습니다.");
+        else
+            System.out.println("주문을 처리하는데 실패하였습니다.");
+
     }
 }
