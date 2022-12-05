@@ -1,16 +1,20 @@
 package persistence;
 
 import lombok.*;
+import org.apache.ibatis.type.Alias;
+import protocol.MySerializableClass;
 
-import java.io.Serializable;
+import java.io.ByteArrayOutputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
 
 @Getter
 @Setter
 @ToString
 @NoArgsConstructor
 
-//@Alias("orderOptionList")
-public class OrderOptionDTO implements Serializable {
+@Alias("orderOptionList")
+public class OrderOptionDTO implements MySerializableClass {
     private String orderMenu_id;
     private String option_name;
 
@@ -34,5 +38,15 @@ public class OrderOptionDTO implements Serializable {
 
     public void setOption_name(String option_name) {
         this.option_name = option_name;
+    }
+
+    @Override
+    public byte[] getBytes() throws IOException {
+        ByteArrayOutputStream buf = new ByteArrayOutputStream();
+        DataOutputStream dos = new DataOutputStream(buf);
+
+        dos.writeUTF(orderMenu_id);
+        dos.writeUTF(option_name);
+        return buf.toByteArray();
     }
 }
