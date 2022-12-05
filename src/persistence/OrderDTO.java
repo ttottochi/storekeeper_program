@@ -34,6 +34,17 @@ public class OrderDTO implements MySerializableClass {
         this.order_num = order_num;
     }
 
+    public OrderDTO(int order_id ,String user_id, int store_id, long order_price,
+                    String order_state , LocalDateTime order_orderTime, String order_num) {
+        this.order_id = order_id;
+        this.user_id = user_id;
+        this.store_id = store_id;
+        this.order_price = order_price;
+        this.order_state = order_state;
+        this.order_orderTime = order_orderTime;
+        this.order_num = order_num;
+    }
+
     public OrderDTO(int order_id) {
         this.order_id = order_id;
     }
