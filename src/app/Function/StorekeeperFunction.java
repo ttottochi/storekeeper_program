@@ -1,3 +1,4 @@
+/*
 package app.Function;
 
 import persistence.dto.MenuDTO;
@@ -117,4 +118,4 @@ public class StorekeeperFunction {
         mv.printStoreAllMenu_Keeper(menuDTOS, store_id);
         ms.menuAdd(store_id);
     }
-}
+}*/
