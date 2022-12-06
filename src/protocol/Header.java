@@ -30,6 +30,7 @@ public class Header implements MySerializableClass {
     public final static byte CODE_ORDER_ACCEPT = 0x30;
     public final static byte CODE_REVIEW_LOOKUP = 0x31;
     public final static byte CODE_STATISTICS = 0x32;
+    public final static byte CODE_USER_ACCEPT=0x33;
 
     //TYPE : 0x01(REQUEST) or 0x02(ANSWER) 일 때
     public final static byte CODE_USER_ID = 0x01;
@@ -70,8 +71,7 @@ public class Header implements MySerializableClass {
     public final static byte CODE_INSERT_ORDER_MENU = 0x56;
     public final static byte CODE_INSERT_ORDER_OPTION = 0x57;
     public final static byte CODE_USER_LIST = 0x58;
-    public final static byte CODE_INSERT_MENU = 0x59;
-    public final static byte CODE_MENU_INFO = 0x5A;
+
 
     //TYPE : 0x03(RESULT) 일 때
     public final static byte CODE_SUCCESS = 0x01;

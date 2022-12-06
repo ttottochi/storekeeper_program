@@ -22,7 +22,6 @@ public class StatisticsController {
         outputStream.write(startHeader.getBytes());
 
         // statisticalinfo DTO LIST 받기
-
         Header list_header = Header.readHeader(inputStream);
         int listSize = inputStream.readInt();
         List<StatisticalInfoDTO> list  = new ArrayList<StatisticalInfoDTO>();
@@ -36,7 +35,7 @@ public class StatisticsController {
             list.add(statisticalInfoDTO);
         }
 
-        System.out.println("메뉴 별 통계");
+        System.out.println("<메뉴 별 통계>");
         for(int i = 0 ; i < list.size() ; i ++)
         {
             StatisticalInfoDTO statisticInfo = list.get(i);
