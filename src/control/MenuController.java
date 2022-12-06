@@ -37,6 +37,8 @@ public class MenuController {
             responseSender.sendAddMenuInfoAns(store_id, outputStream);//menu_info보내기
         }
 
+
+
         if((addMenuDTO = requestReceiver.receiveMenuAddResult(inputStream)) != null) {
             System.out.println("메뉴가 추가 되었습니다.");
             System.out.println("카테고리 : " + addMenuDTO.getMenu_category() + "| " + addMenuDTO.getMenu_name() + " | 가격 : " + addMenuDTO.getMenu_price() + " | 재고 : " + addMenuDTO.getMenu_quantity());

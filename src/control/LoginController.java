@@ -7,6 +7,7 @@ import protocol.*;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.sql.SQLOutput;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -58,6 +59,12 @@ public class LoginController {
         }
 
         loginUser = UserDTO.read(inputStream);
+
+        if(loginUser.getUser_category() != 1)
+        {
+            System.out.println("해당 회원은 점주가 아닙니다. 다시 로그인해주세요.");
+            return null;
+        }
         int userStoreNum = inputStream.readInt();
 
         List<StoreDTO> userStores = new ArrayList<StoreDTO>();
@@ -66,6 +73,11 @@ public class LoginController {
             userStores.add(StoreDTO.read(inputStream));
         }
 
+        for(StoreDTO userstore : userStores)
+        {
+            System.out.print(" " + userstore.getStore_name() + " ");
+        }
+        System.out.println("가게 점주");
         System.out.println(loginUser.getUser_name() + "(" + loginUser.getUser_id() + ")" + "님 로그인 되셨습니다.");
         return loginUser.getUser_id();
     }

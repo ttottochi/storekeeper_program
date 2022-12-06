@@ -16,6 +16,7 @@ public class Controller {
 //    public static final int FIND_ALL_PLAYER = 3;
 //    public static final int FIND_ALL_TEAM = 4;
     public static final int MENU_ADD_APPLY = 3;
+    public static final int STORE_TIME_UPDATE = 4;
     public static final int ORDER_ACCEPT_OR_REFUSE = 6;
     public static final int REVIEW_LOOKUP_REPLY = 7;
     public static final int STATISTICS = 8;
@@ -25,6 +26,7 @@ public class Controller {
 
     public boolean handleCommand(int command, Scanner sc, DataInputStream inputStream, DataOutputStream outputStream) throws IOException {
         MenuController menuController = new MenuController();
+        StoreController storeController = new StoreController();
         LoginController loginController = new LoginController();
         OrderAcceptController orderAcceptController = new OrderAcceptController();
         ReviewController reviewController = new ReviewController();
@@ -32,6 +34,7 @@ public class Controller {
         ResponseReceiver resReceiver = new ResponseReceiver();
         RequestSender reqSender = new RequestSender();
 
+        String user_id = null;
         int store_id = 1;//임시
 
         switch(command) {
@@ -41,11 +44,17 @@ public class Controller {
                 break;
 
             case LOG_IN:
-                loginController.handleLogin(sc,inputStream, outputStream);
+                user_id = loginController.handleLogin(sc,inputStream, outputStream);
                 break;
 
             case MENU_ADD_APPLY:
                 menuController.handleMenuApply(sc,store_id, inputStream, outputStream);
+                break;
+
+            case STORE_TIME_UPDATE:
+                storeController.handleStoreTimeUpdate(sc, store_id, inputStream, outputStream);
+                break;
+
 
             case ORDER_ACCEPT_OR_REFUSE:
                 orderAcceptController.handleOrderAccept(sc,inputStream,outputStream);
