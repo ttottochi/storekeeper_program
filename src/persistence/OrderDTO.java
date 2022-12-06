@@ -4,9 +4,11 @@ import lombok.*;
 import protocol.MySerializableClass;
 
 import java.io.ByteArrayOutputStream;
+import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @ToString
@@ -30,17 +32,6 @@ public class OrderDTO implements MySerializableClass {
         this.store_id = store_id;
         this.order_price = order_price;
         this.order_state = "접수 대기";
-        this.order_orderTime = order_orderTime;
-        this.order_num = order_num;
-    }
-
-    public OrderDTO(int order_id ,String user_id, int store_id, long order_price,
-                    String order_state , LocalDateTime order_orderTime, String order_num) {
-        this.order_id = order_id;
-        this.user_id = user_id;
-        this.store_id = store_id;
-        this.order_price = order_price;
-        this.order_state = order_state;
         this.order_orderTime = order_orderTime;
         this.order_num = order_num;
     }
@@ -113,17 +104,41 @@ public class OrderDTO implements MySerializableClass {
         this.order_num = order_num;
     }
 
+    public static OrderDTO read(DataInputStream bodyReader) throws IOException
+    {
+        String user_id = bodyReader.readUTF();
+        int store_id = bodyReader.readInt();
+        long order_price = bodyReader.readLong();
+        String order_state = bodyReader.readUTF();
+        String order_orderTime = bodyReader.readUTF();
+        String order_num = bodyReader.readUTF();
+
+        return new OrderDTO(user_id, store_id, order_price, LocalDateTime.now(), order_num);
+    }
+
+    public OrderDTO(int order_id ,String user_id, int store_id, long order_price,
+                    String order_state , LocalDateTime order_orderTime, String order_num) {
+        this.order_id = order_id;
+        this.user_id = user_id;
+        this.store_id = store_id;
+        this.order_price = order_price;
+        this.order_state = order_state;
+        this.order_orderTime = order_orderTime;
+        this.order_num = order_num;
+    }
+
     @Override
     public byte[] getBytes() throws IOException {
         ByteArrayOutputStream buf = new ByteArrayOutputStream();
         DataOutputStream dos = new DataOutputStream(buf);
+        String ldtToStr = order_orderTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
 
         dos.writeInt(order_id);
         dos.writeUTF(user_id);
         dos.writeInt(store_id);
         dos.writeLong(order_price);
         dos.writeUTF(order_state);
-        dos.writeUTF(String.valueOf(order_orderTime)); // 받는 쪽에서 String -> LocalDateTime으로 변환해야함
+        dos.writeUTF(ldtToStr); // 받는 쪽에서 String -> LocalDateTime으로 변환해야함
         dos.writeUTF(order_num);
         return buf.toByteArray();
     }

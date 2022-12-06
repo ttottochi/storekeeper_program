@@ -22,8 +22,8 @@ public class Controller {
 
 
 
-    public boolean handleCommand(int command, Scanner s, DataInputStream inputStream, DataOutputStream outputStream) throws IOException {
-
+    public boolean handleCommand(int command, Scanner sc, DataInputStream inputStream, DataOutputStream outputStream) throws IOException {
+        OrderAcceptController orderAcceptController = new OrderAcceptController();
         ResponseReceiver resReceiver = new ResponseReceiver();
         RequestSender reqSender = new RequestSender();
 
@@ -34,13 +34,13 @@ public class Controller {
                 break;
 
             case LOG_IN:
-                reqSender.sendCustomerID(s, outputStream);
-                reqSender.sendCustomerPW(s, outputStream);
+                reqSender.sendCustomerID(sc, outputStream);
+                reqSender.sendCustomerPW(sc, outputStream);
                 resReceiver.receiveLogInResult(inputStream);
                 break;
 
             case ORDER_ACCEPT_OR_REFUSE:
-
+                orderAcceptController.handleOrderAccept(sc,inputStream,outputStream);
                 break;
 
             case REVIEW_LOOKUP_REPLY:

@@ -1,7 +1,9 @@
 package persistence;
 
-import lombok.*;
-import org.apache.ibatis.type.Alias;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 import protocol.MySerializableClass;
 
 import java.io.ByteArrayOutputStream;
@@ -13,7 +15,6 @@ import java.io.IOException;
 @ToString
 @NoArgsConstructor
 
-@Alias("orderOptionList")
 public class OrderOptionDTO implements MySerializableClass {
     private String orderMenu_id;
     private String option_name;
