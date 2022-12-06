@@ -1,6 +1,8 @@
 package control;
 
 import persistence.OrderDTO;
+import persistence.OrderMenuDTO;
+import persistence.OrderOptionDTO;
 import protocol.BodyMaker;
 import protocol.Header;
 
@@ -52,8 +54,60 @@ public class OrderAcceptController {
             for(int i = 0 ; i < listSize ; i ++)
             {
                 OrderDTO order = list.get(i);
-                System.out.println("("+(i+1)+")"+" 주문자:"+order.getUser_id()+" 주문 가격:"+order.getOrder_price()+
-                        " 주문 상태:"+order.getOrder_state()+" 주문시간:"+order.getOrder_orderTime());
+                BodyMaker rqBm = new BodyMaker();
+                rqBm.addStringBytes(list.get(i).getOrder_num());
+                byte[] rqBody = rqBm.getBody();
+                Header rqHeader = new Header(
+                        Header.TYPE_REQ,
+                        Header.CODE_ORDERED_MENU_LIST,
+                        rqBody.length);
+                outputStream.write(rqHeader.getBytes());
+                outputStream.write(rqBody);
+
+                Header omHeader = Header.readHeader(inputStream);
+                int omList_Size = inputStream.readInt();
+                List<OrderMenuDTO> omDTOS = new ArrayList<OrderMenuDTO>();
+                for(int j = 0 ;  j < omList_Size ; j ++)
+                {
+                    String orderMenu_id = inputStream.readUTF();String menu_name = inputStream.readUTF();String order_num = inputStream.readUTF();
+                    OrderMenuDTO omDTO  = new OrderMenuDTO(orderMenu_id , order_num , menu_name);
+                    omDTOS.add(omDTO);
+                }
+                System.out.print("("+(i+1)+") 주문 메뉴:");
+                for(int j = 0 ; j <omList_Size ; j++)
+                {
+                    OrderMenuDTO om = omDTOS.get(j);
+
+                    BodyMaker rqOBm = new BodyMaker();
+                    rqOBm.addStringBytes(om.getOrderMenu_id());
+                    byte[] rqOBody = rqOBm.getBody();
+                    Header rqOHeader = new Header(
+                            Header.TYPE_REQ,
+                            Header.CODE_ORDERED_OPTION,
+                            rqOBody.length);
+                    outputStream.write(rqOHeader.getBytes());
+                    outputStream.write(rqOBody);
+
+                    Header ooHeader = Header.readHeader(inputStream);
+                    int ooList_Size = inputStream.readInt();
+                    List<OrderOptionDTO> ooDTOS = new ArrayList<OrderOptionDTO>();
+                    for(int k = 0 ;  k < ooList_Size ; k ++)
+                    {
+                        String orderMenu_id = inputStream.readUTF();String option = inputStream.readUTF();
+                        OrderOptionDTO ooDTO  = new OrderOptionDTO(orderMenu_id , option);
+                        ooDTOS.add(ooDTO);
+                    }
+                    System.out.print(om.getMenu_name() + "(");
+                    for(int k = 0 ; k <ooDTOS.size() ; k ++)
+                    {
+                        System.out.print(ooDTOS.get(k).getOption_name());
+                        if(k < ooDTOS.size()-1) System.out.print(",");
+                    }
+                    if(ooDTOS.size() == 0) System.out.print("옵션 x )");
+                    else System.out.print(")");
+                }
+                System.out.println(", 주문자:"+order.getUser_id()+", 주문 가격:"+order.getOrder_price()+
+                        ", 주문 상태:"+order.getOrder_state()+", 주문시간:"+order.getOrder_orderTime());
             }
             System.out.println("승인 혹은 거절할 주문의 번호를 입력하시오 : ");
             int select_Order = sc.nextInt();
