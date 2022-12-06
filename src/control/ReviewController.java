@@ -75,7 +75,7 @@ public class ReviewController {
                 Review_omDTO reply = reply_List.get(j);
                 if(reply.getReview_comment()  == review.getReview_id())
                 {
-                    System.out.println("ㄴ " + reply.getReview_comment());
+                    System.out.println("ㄴ " + reply.getReview_content());
                     checkReply.add(i);
                     break;
                 }
@@ -85,6 +85,7 @@ public class ReviewController {
 
         System.out.println("답글을 작성할 리뷰의 번호를 선택하시오 : ");
         int select_review = sc.nextInt();
+        sc.nextLine();
         boolean isReplyed = false;
         for(int i = 0 ; i < checkReply.size() ; i ++)
         {
