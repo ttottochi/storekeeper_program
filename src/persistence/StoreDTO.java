@@ -6,6 +6,7 @@ import lombok.ToString;
 import protocol.MySerializableClass;
 
 import java.io.ByteArrayOutputStream;
+import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
@@ -23,6 +24,40 @@ public class StoreDTO implements MySerializableClass {
     private int store_rate;
     private String store_time;
     private String store_info;
+
+    public StoreDTO()
+    {}
+
+    public StoreDTO(int store_id, String user_id, String store_name,String store_phone,String store_address,boolean store_state, int store_category, int store_rate,String store_time, String store_info)
+    {
+        this.store_id= store_id;
+        this.user_id=user_id; //점주 누군지 확인용
+        this.store_name=store_name;
+        this.store_phone=store_phone;
+        this.store_address=store_address;
+        this.store_state=store_state;
+        this.store_category=store_category;
+        this.store_rate=store_rate;
+        this.store_time=store_time;
+        this.store_info=store_info;
+    }
+
+    public static StoreDTO read(DataInputStream bodyReader) throws IOException {
+         int store_id = bodyReader.readInt();
+         String user_id = bodyReader.readUTF(); //점주 누군지 확인용
+         String store_name = bodyReader.readUTF();
+         String store_phone = bodyReader.readUTF();
+         String store_address = bodyReader.readUTF();
+         boolean store_state = bodyReader.readBoolean();
+         int store_category = bodyReader.read();
+         int store_rate = bodyReader.read();
+         String store_time = bodyReader.readUTF();
+         String store_info = bodyReader.readUTF();
+
+        StoreDTO storeDTO = new StoreDTO(store_id, user_id, store_name,store_phone,store_address,store_state, store_category, store_rate,store_time, store_info);
+        return storeDTO;
+    }
+
 
     public int getStore_id() {
         return store_id;
