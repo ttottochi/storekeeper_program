@@ -24,6 +24,8 @@ public class Controller {
 
     public boolean handleCommand(int command, Scanner sc, DataInputStream inputStream, DataOutputStream outputStream) throws IOException {
         OrderAcceptController orderAcceptController = new OrderAcceptController();
+        ReviewController reviewController = new ReviewController();
+        StatisticsController statisticsController = new StatisticsController();
         ResponseReceiver resReceiver = new ResponseReceiver();
         RequestSender reqSender = new RequestSender();
 
@@ -44,9 +46,11 @@ public class Controller {
                 break;
 
             case REVIEW_LOOKUP_REPLY:
+                reviewController.handleReview(sc , inputStream , outputStream);
                 break;
 
             case STATISTICS:
+                statisticsController.handleStatistics( sc, inputStream , outputStream);
                 break;
 
             case QUIT:

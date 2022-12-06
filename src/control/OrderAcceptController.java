@@ -19,6 +19,7 @@ public class OrderAcceptController {
 
         //시작 신호 보내기
         BodyMaker bodyMaker = new BodyMaker();
+
         Header startHeader = new Header(
                 Header.TYPE_START,
                 Header.CODE_ORDER_ACCEPT,
@@ -29,7 +30,6 @@ public class OrderAcceptController {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
         Header list_header = Header.readHeader(inputStream);
-        byte[] body = new byte[list_header.length];
         int listSize = inputStream.readInt();
         List<OrderDTO> list  = new ArrayList<OrderDTO>();
         for(int i = 0 ; i <listSize ; i ++)
