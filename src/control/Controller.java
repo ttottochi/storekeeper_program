@@ -15,8 +15,9 @@ public class Controller {
 //    public static final int FIND_PLAYER_BY_NAME = 2;
 //    public static final int FIND_ALL_PLAYER = 3;
 //    public static final int FIND_ALL_TEAM = 4;
-    public static final int MENU_ADD_APPLY = 3;
-    public static final int STORE_TIME_UPDATE = 4;
+    public static final int STORE_ADD_APPLY = 3;
+    public static final int MENU_ADD_APPLY = 4;
+    public static final int STORE_TIME_UPDATE = 5;
     public static final int ORDER_ACCEPT_OR_REFUSE = 6;
     public static final int REVIEW_LOOKUP_REPLY = 7;
     public static final int STATISTICS = 8;
@@ -46,6 +47,9 @@ public class Controller {
             case LOG_IN:
                 user_id = loginController.handleLogin(sc,inputStream, outputStream);
                 break;
+
+            case STORE_ADD_APPLY:
+                storeController.handleStoreApply(sc, user_id, inputStream, outputStream);
 
             case MENU_ADD_APPLY:
                 menuController.handleMenuApply(sc,store_id, inputStream, outputStream);

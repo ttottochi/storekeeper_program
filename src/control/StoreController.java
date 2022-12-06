@@ -1,5 +1,6 @@
 package control;
 
+import persistence.StoreDTO;
 import protocol.*;
 
 import java.io.DataInputStream;
@@ -22,14 +23,34 @@ public class StoreController {
     }
     public void handleStoreTimeUpdate(Scanner sc, int store_id, DataInputStream inputStream, DataOutputStream outputStream) throws IOException {
         //시작 신호 보내기
+        BodyMaker bodyMaker = new BodyMaker();
+        bodyMaker.addIntBytes(store_id);
+
+        byte[] body = bodyMaker.getBody();
         Header startHeader = new Header(
                 Header.TYPE_START,
                 Header.CODE_UPDATE_STORE_TIME,
-                0);
+                body.length);
         outputStream.write(startHeader.getBytes());
+        outputStream.write(body);
 
-        System.out.println("");
-        if(requestReceiver.receiveStoreTimeReq(inputStream)) //id 요청 받기
-            responseSender.sendStoreTimeAns(outputStream); //id 요청 받고 id 보내기
+        if(requestReceiver.receiveStoreTimeReq(inputStream)) {
+            StoreDTO nowStore = StoreDTO.read(inputStream);
+            System.out.println(nowStore.getStore_name() + " | ");
+
+            responseSender.sendStoreTimeAns(store_id, outputStream);
+        }
+        StoreDTO updateStore = new StoreDTO();
+
+        if((updateStore = requestReceiver.receiveStoreTimeUpdateResult(inputStream)) != null) {
+            System.out.println("운영시간 변경 완료.");
+            System.out.println(updateStore.getStore_name() + " | 현재 운영시간 : " + updateStore.getStore_time());
+        }
+        else
+
+
+    }
+
+    public void handleStoreApply(Scanner sc, String user_id, DataInputStream inputStream, DataOutputStream outputStream) {
     }
 }

@@ -32,9 +32,9 @@ public class Main {
 
             System.out.println("1. 회원가입");
             System.out.println("2. 로그인");
-            System.out.println("3. 메뉴 추가");
-            System.out.println("4. 영업시간 변경");
-            System.out.println("5. 기억이 안나");
+            System.out.println("3. 매장 추가");
+            System.out.println("4. 메뉴 추가");
+            System.out.println("5. 영업시간 변경");
             System.out.println("6. 주문 접수 승인/거절");
             System.out.println("7. 리뷰 조회/답글");
             System.out.println("8. 통계정보 (메뉴별 주문건수, 매출)");
