@@ -49,12 +49,8 @@ public class ReviewController {
 
         // review list ( review comment > 0 ) 받기
         Header reply_header = Header.readHeader(inputStream);
-        System.out.println(reply_header.type);
-        System.out.println(reply_header.code);
-        System.out.println(reply_header.length);
 
         int reply_List_Size = inputStream.readInt();
-        System.out.println("reply list size :" + reply_List_Size);
         List<Review_omDTO> reply_List  = new ArrayList<Review_omDTO>();
 
         for(int i = 0 ; i <reply_List_Size ; i ++)
@@ -68,7 +64,6 @@ public class ReviewController {
             Review_omDTO review_omDTO = new Review_omDTO(review_id,order_id, store_id , menu_name, review_content , review_rate,review_comment);
             reply_List.add(review_omDTO);
         }
-        System.out.println(reply_List.size());
 
         List<Integer> checkReply = new ArrayList<Integer>();
         System.out.println("<리뷰 목록>");
