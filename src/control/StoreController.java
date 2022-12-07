@@ -47,10 +47,28 @@ public class StoreController {
             System.out.println(updateStore.getStore_name() + " | 현재 운영시간 : " + updateStore.getStore_time());
         }
         else
-
+            System.out.println("운영시간 변경 완료.");
 
     }
 
-    public void handleStoreApply(Scanner sc, String user_id, DataInputStream inputStream, DataOutputStream outputStream) {
+    public void handleStoreApply(Scanner sc, String user_id, DataInputStream inputStream, DataOutputStream outputStream) throws IOException {
+        //시작 신호 보내기
+        Header startHeader = new Header(
+                Header.TYPE_START,
+                Header.CODE_STORE_APPLY,
+                0);
+        outputStream.write(startHeader.getBytes());
+
+        if(requestReceiver.receiveStoreApplyReq(inputStream))
+        {
+            responseSender.sendStoreInfoAns(user_id, outputStream);
+        }
+
+        if(requestReceiver.receiveResultReq(inputStream))
+        {
+            System.out.println("가게 등록 성공");
+        }
+
+
     }
 }

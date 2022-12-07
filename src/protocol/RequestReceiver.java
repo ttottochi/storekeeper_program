@@ -22,6 +22,17 @@ public class RequestReceiver {
         else
             return false;
     }
+    public boolean receiveStoreApplyReq(DataInputStream inputStream) throws IOException {
+        Header header = Header.readHeader(inputStream);
+
+        boolean typeCheck = (header.type == header.TYPE_REQ) ? true : false;
+        boolean codeCheck = (header.code == header.CODE_STORE_INFO) ? true : false;
+
+        if(typeCheck&&codeCheck)
+            return true;
+        else
+            return false;
+    }
     public String receiveUserInfoReq(DataInputStream inputStream) throws IOException {
 
         Header header = Header.readHeader(inputStream);

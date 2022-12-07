@@ -35,7 +35,7 @@ public class Controller {
         ResponseReceiver resReceiver = new ResponseReceiver();
         RequestSender reqSender = new RequestSender();
 
-        String user_id = null;
+        String user_id = "store1";
         int store_id = 1;//임시
 
         switch(command) {
@@ -50,6 +50,7 @@ public class Controller {
 
             case STORE_ADD_APPLY:
                 storeController.handleStoreApply(sc, user_id, inputStream, outputStream);
+                break;
 
             case MENU_ADD_APPLY:
                 menuController.handleMenuApply(sc,store_id, inputStream, outputStream);

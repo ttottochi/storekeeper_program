@@ -333,9 +333,10 @@ public class ResponseSender {
 
  */
 
-    public void sendStoreInfoAns(Scanner s, DataOutputStream outputStream) throws IOException { //가게 정보 입력 후 전송
+    public void sendStoreInfoAns(String user_id, DataOutputStream outputStream) throws IOException {
         StoreInputManager addStoreInfoManager = new StoreInputManager();
-        StoreDTO addStoreInfo = addStoreInfoManager.getAddStoreInfo();
+        StoreDTO addStoreInfo = addStoreInfoManager.getAddStoreInfo(); //가게 정보 입력 후 전송
+        addStoreInfo.setUser_id(user_id);
 
         BodyMaker bodyMaker = new BodyMaker();
         bodyMaker.add(addStoreInfo);
