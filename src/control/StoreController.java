@@ -36,10 +36,13 @@ public class StoreController {
 
         if(requestReceiver.receiveStoreTimeReq(inputStream)) {
             StoreDTO nowStore = StoreDTO.read(inputStream);
-            System.out.println(nowStore.getStore_name() + " | ");
+            System.out.println(nowStore.getStore_name() + " |  현재 운영시간 : " + nowStore.getStore_time());
 
             responseSender.sendStoreTimeAns(store_id, outputStream);
         }
+
+        System.out.println("--------------------------------------");
+
         StoreDTO updateStore = new StoreDTO();
 
         if((updateStore = requestReceiver.receiveStoreTimeUpdateResult(inputStream)) != null) {

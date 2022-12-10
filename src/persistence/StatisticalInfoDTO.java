@@ -6,6 +6,7 @@ import lombok.ToString;
 import protocol.MySerializableClass;
 
 import java.io.ByteArrayOutputStream;
+import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
@@ -27,6 +28,17 @@ public class StatisticalInfoDTO implements MySerializableClass {
         this.menu_name = menu_name;
         this.sum_order_price = sum_order_price;
         this.count_order = count_order;
+    }
+
+    public static StatisticalInfoDTO read(DataInputStream bodyReader) throws IOException
+    {
+        int store_id = bodyReader.readInt();
+        String store_name = bodyReader.readUTF();
+        String menu_name = bodyReader.readUTF();
+        long sum_order_price = bodyReader.readLong();
+        int count_order = bodyReader.readInt();
+
+        return new StatisticalInfoDTO(store_id, store_name, menu_name, sum_order_price, count_order);
     }
 
     @Override

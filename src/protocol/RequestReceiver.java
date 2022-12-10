@@ -8,6 +8,8 @@ import persistence.UserDTO;
 import java.io.ByteArrayInputStream;
 import java.io.DataInputStream;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class RequestReceiver {
 
@@ -28,8 +30,10 @@ public class RequestReceiver {
         boolean typeCheck = (header.type == header.TYPE_REQ) ? true : false;
         boolean codeCheck = (header.code == header.CODE_STORE_INFO) ? true : false;
 
-        if(typeCheck&&codeCheck)
+        if(typeCheck&&codeCheck) {
+            System.out.println("매장 추가 시작");
             return true;
+        }
         else
             return false;
     }
@@ -56,7 +60,26 @@ public class RequestReceiver {
         boolean typeCheck = (header.type == header.TYPE_RES) ? true : false;
         boolean codeCheck = (header.code == header.CODE_SUCCESS) ? true : false;
 
-        return typeCheck && codeCheck;
+        if(typeCheck&&codeCheck)
+            return true;
+        else
+            return false;
+    }
+
+    public boolean receiveStoreSelectResultReq(DataInputStream inputStream) throws IOException {
+
+        Header header = Header.readHeader(inputStream);
+        System.out.println("타입 : " + header.type + " 코드 : " + header.code);
+
+        boolean typeCheck = (header.type == header.TYPE_RES) ? true : false;
+        boolean codeCheck = (header.code == header.CODE_SUCCESS) ? true : false;
+
+        if(typeCheck&&codeCheck) {
+            return true;
+        }
+        else {
+            return true;
+        }
     }
 
     public String receiveUserIDResult_SignUpReq(DataInputStream inputStream) throws IOException {
@@ -98,7 +121,6 @@ public class RequestReceiver {
     public boolean receiveUserPWResult_LogInReq(DataInputStream inputStream) throws IOException {
 
         Header header = Header.readHeader(inputStream);
-
 
         boolean typeCheck = (header.type == header.TYPE_RES) ? true : false;
         boolean codeCheck = (header.code == header.CODE_SUCCESS) ? true : false;

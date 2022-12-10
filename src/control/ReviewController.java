@@ -13,14 +13,19 @@ import java.util.Scanner;
 
 public class ReviewController {
 
-    public void handleReview(Scanner sc, DataInputStream inputStream, DataOutputStream outputStream) throws IOException {
+    public void handleReview(Scanner sc,int store_id, DataInputStream inputStream, DataOutputStream outputStream) throws IOException {
 
         //시작 신호 보내기
+        BodyMaker bodyMaker_start = new BodyMaker();
+        bodyMaker_start.addIntBytes(store_id);
+        byte[] start_Body = bodyMaker_start.getBody();
         Header startHeader = new Header(
                 Header.TYPE_START,
                 Header.CODE_REVIEW_LOOKUP,
-                0);
+                start_Body.length);
         outputStream.write(startHeader.getBytes());
+        outputStream.write(start_Body);
+
 
         //서버에서 보낸 review List( review comment == 0 ) 받기
         Header list_header = Header.readHeader(inputStream);
@@ -31,11 +36,11 @@ public class ReviewController {
         for(int i = 0 ; i <listSize ; i ++)
         {
             int review_id = inputStream.readInt(); int order_id = inputStream.readInt();
-            int store_id = inputStream.readInt(); String menu_name = inputStream.readUTF();
+            int rstore_id = inputStream.readInt(); String menu_name = inputStream.readUTF();
             String review_content = inputStream.readUTF(); int review_rate = inputStream.readInt() ;
             int review_comment = inputStream.readInt();
 
-            Review_omDTO review_omDTO = new Review_omDTO(review_id ,order_id, store_id , menu_name, review_content , review_rate , review_comment);
+            Review_omDTO review_omDTO = new Review_omDTO(review_id ,order_id, rstore_id , menu_name, review_content , review_rate , review_comment);
             list.add(review_omDTO);
         }
 
@@ -46,26 +51,27 @@ public class ReviewController {
                 0);
         outputStream.write(rqHeader.getBytes());
 
-
         // review list ( review comment > 0 ) 받기
         Header reply_header = Header.readHeader(inputStream);
-        System.out.println(reply_header.type);
-        System.out.println(reply_header.code);
-        System.out.println(reply_header.length);
 
         int reply_List_Size = inputStream.readInt();
-        System.out.println("reply list size :" + reply_List_Size);
+
+        if(reply_List_Size == 0) {
+            System.out.println("리뷰가 존재하지 않습니다.");
+            return;
+        }
+
         List<Review_omDTO> reply_List  = new ArrayList<Review_omDTO>();
 
         for(int i = 0 ; i <reply_List_Size ; i ++)
         {
             int review_id = inputStream.readInt();
             int order_id = inputStream.readInt();
-            int store_id = inputStream.readInt(); String menu_name = inputStream.readUTF();
+            int rrstore_id = inputStream.readInt(); String menu_name = inputStream.readUTF();
             String review_content = inputStream.readUTF(); int review_rate = inputStream.readInt() ;
             int review_comment = inputStream.readInt();
 
-            Review_omDTO review_omDTO = new Review_omDTO(review_id,order_id, store_id , menu_name, review_content , review_rate,review_comment);
+            Review_omDTO review_omDTO = new Review_omDTO(review_id,order_id, rrstore_id , menu_name, review_content , review_rate,review_comment);
             reply_List.add(review_omDTO);
         }
         System.out.println(reply_List.size());

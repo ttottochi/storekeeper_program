@@ -1,4 +1,4 @@
-import control.Controller;
+import MenuControl.MainController;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -24,28 +24,23 @@ public class Main {
 
         boolean isContinue = true;
 
-        Controller controller = new Controller();
+        MainController mainController = new MainController(socket);
+
 
         while(isContinue) {
 
             int command;
-
+            System.out.println();
+            System.out.println("==================메인 메뉴=================");
             System.out.println("1. 회원가입");
             System.out.println("2. 로그인");
-            System.out.println("3. 매장 추가");
-            System.out.println("4. 메뉴 추가");
-            System.out.println("5. 영업시간 변경");
-            System.out.println("6. 주문 접수 승인/거절");
-            System.out.println("7. 리뷰 조회/답글");
-            System.out.println("8. 통계정보 (메뉴별 주문건수, 매출)");
-            System.out.println("9. 종료");
-            System.out.println("======================================");
+            System.out.println("0. 종료");
+            System.out.println("==========================================");
             System.out.print("메뉴를 선택하세요 : ");
             command = sc.nextInt();
 
-            isContinue = controller.handleCommand(command, sc, is, os);
-
-            System.out.println("======================================");
+            System.out.println();
+            isContinue = mainController.handleMainCommand(command, sc, is, os);
 
 
         } // end of while

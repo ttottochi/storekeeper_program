@@ -27,17 +27,15 @@ public class OrderDTO implements MySerializableClass {
     private List<OrderMenuDTO> orderMenuList;
     private List<OrderOptionDTO> orderOptionList;
 
-    public OrderDTO(String user_id, int store_id, long order_price, LocalDateTime order_orderTime, String order_num) {
+    public OrderDTO(int order_id, String user_id, int store_id, long order_price, String order_state, String order_orderTime, String order_num) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        this.order_id = order_id;
         this.user_id = user_id;
         this.store_id = store_id;
         this.order_price = order_price;
-        this.order_state = "접수 대기";
-        this.order_orderTime = order_orderTime;
+        this.order_state = order_state;
+        this.order_orderTime = LocalDateTime.parse(order_orderTime, formatter);
         this.order_num = order_num;
-    }
-
-    public OrderDTO(int order_id) {
-        this.order_id = order_id;
     }
 
     public int getOrder_id() {
@@ -106,6 +104,7 @@ public class OrderDTO implements MySerializableClass {
 
     public static OrderDTO read(DataInputStream bodyReader) throws IOException
     {
+        int order_id = bodyReader.readInt();
         String user_id = bodyReader.readUTF();
         int store_id = bodyReader.readInt();
         long order_price = bodyReader.readLong();
@@ -113,18 +112,7 @@ public class OrderDTO implements MySerializableClass {
         String order_orderTime = bodyReader.readUTF();
         String order_num = bodyReader.readUTF();
 
-        return new OrderDTO(user_id, store_id, order_price, LocalDateTime.now(), order_num);
-    }
-
-    public OrderDTO(int order_id ,String user_id, int store_id, long order_price,
-                    String order_state , LocalDateTime order_orderTime, String order_num) {
-        this.order_id = order_id;
-        this.user_id = user_id;
-        this.store_id = store_id;
-        this.order_price = order_price;
-        this.order_state = order_state;
-        this.order_orderTime = order_orderTime;
-        this.order_num = order_num;
+        return new OrderDTO(order_id, user_id, store_id, order_price, order_state, order_orderTime, order_num);
     }
 
     @Override
@@ -140,6 +128,7 @@ public class OrderDTO implements MySerializableClass {
         dos.writeUTF(order_state);
         dos.writeUTF(ldtToStr); // 받는 쪽에서 String -> LocalDateTime으로 변환해야함
         dos.writeUTF(order_num);
+
         return buf.toByteArray();
     }
 }

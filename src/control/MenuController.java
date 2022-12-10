@@ -85,7 +85,6 @@ public class MenuController {
 
                 if((addedMenuWithOption = requestReceiver.receiveMenuOptionAddResult(inputStream)) != null)
                 {
-                    System.out.println("이제 출력할거임");
                     int addedMenuOptionNum = inputStream.readInt();
                     for(int i = 0; i< addedMenuOptionNum; i++)
                     {

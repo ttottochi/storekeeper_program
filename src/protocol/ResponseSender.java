@@ -2,6 +2,7 @@ package protocol;
 
 import inputManager.MenuInputManager;
 import inputManager.StoreInputManager;
+import inputManager.UserInputManager;
 import persistence.*;
 
 import java.io.DataOutputStream;
@@ -29,7 +30,22 @@ public class ResponseSender {
 
         outputStream.write(header.getBytes());
         outputStream.write(body);
-        System.out.println("아이디 입력 보냄");
+    }
+
+    public void sendLoginedUserIDAns(String user_id, DataOutputStream outputStream) throws IOException {
+        BodyMaker bodyMaker = new BodyMaker();
+        bodyMaker.addStringBytes(user_id);
+
+        byte[] body = bodyMaker.getBody();
+
+        Header header = new Header(
+                Header.TYPE_ANS,
+                Header.CODE_LOGINED_USER_ID,
+                body.length
+        );
+
+        outputStream.write(header.getBytes());
+        outputStream.write(body);
     }
 
     public void sendUserPWAns(Scanner s,String user_id, DataOutputStream outputStream) throws IOException {
@@ -47,6 +63,27 @@ public class ResponseSender {
         Header header = new Header(
                 Header.TYPE_ANS,
                 Header.CODE_USER_PW,
+                body.length
+        );
+
+        outputStream.write(header.getBytes());
+        outputStream.write(body);
+    }
+
+
+    public void sendUserInfoAns(Scanner s, String user_id,DataOutputStream outputStream) throws IOException {
+        UserInputManager addUserInfoManager = new UserInputManager();
+        UserDTO addUserInfo = addUserInfoManager.getAddUserInfo();
+        addUserInfo.setUser_id(user_id);
+
+        BodyMaker bodyMaker = new BodyMaker();
+        bodyMaker.add(addUserInfo);
+
+        byte[] body = bodyMaker.getBody();
+
+        Header header = new Header(
+                Header.TYPE_ANS,
+                Header.CODE_USER_INFO,//임시 코드
                 body.length
         );
 
@@ -342,7 +379,6 @@ public class ResponseSender {
         bodyMaker.add(addStoreInfo);
 
         byte[] body = bodyMaker.getBody();
-
         Header header = new Header(
                 Header.TYPE_ANS,
                 Header.CODE_STORE_INFO,//임시 코드 가게 정보 전송

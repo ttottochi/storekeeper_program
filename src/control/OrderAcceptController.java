@@ -17,16 +17,18 @@ import java.util.Scanner;
 
 public class OrderAcceptController {
 
-    public void handleOrderAccept(Scanner sc, DataInputStream inputStream, DataOutputStream outputStream) throws IOException {
+    public void handleOrderAccept(Scanner sc,int store_id, DataInputStream inputStream, DataOutputStream outputStream) throws IOException {
 
         //시작 신호 보내기
-        BodyMaker bodyMaker = new BodyMaker();
-
+        BodyMaker bodyMaker_start = new BodyMaker();
+        bodyMaker_start.addIntBytes(store_id);
+        byte[] start_Body = bodyMaker_start.getBody();
         Header startHeader = new Header(
                 Header.TYPE_START,
                 Header.CODE_ORDER_ACCEPT,
-                0);
+                start_Body.length);
         outputStream.write(startHeader.getBytes());
+        outputStream.write(start_Body);
 
         //서버에서 보낸 Order List 받기
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
@@ -36,13 +38,7 @@ public class OrderAcceptController {
         List<OrderDTO> list  = new ArrayList<OrderDTO>();
         for(int i = 0 ; i <listSize ; i ++)
         {
-            int order_id = inputStream.readInt(); String user_id = inputStream.readUTF();
-            int store_id = inputStream.readInt(); long order_price = inputStream.readLong();
-            String order_state = inputStream.readUTF() ;
-            LocalDateTime order_orderTime= LocalDateTime.parse(inputStream.readUTF(),formatter);
-            String order_num = inputStream.readUTF();
-            OrderDTO orderDTO = new OrderDTO(order_id , user_id , store_id , order_price , order_state , order_orderTime , order_num);
-            list.add(orderDTO);
+           list.add(OrderDTO.read(inputStream));
         }
         if(listSize == 0)
         {

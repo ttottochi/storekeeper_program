@@ -103,6 +103,7 @@ public class UserDTO implements MySerializableClass{
         dos.writeUTF(user_address);
         dos.writeUTF(user_phone);
         dos.writeInt(user_category);
+        dos.writeBoolean(user_state);
         return buf.toByteArray();
     }
 
@@ -113,8 +114,8 @@ public class UserDTO implements MySerializableClass{
         String user_address  = bodyReader.readUTF();
         String user_phone = bodyReader.readUTF();
         int user_category =bodyReader.readInt();
-        UserDTO userDTO = new UserDTO(user_id , user_pw, user_name , user_address , user_phone , user_category);
+        boolean user_state = bodyReader.readBoolean();
+        UserDTO userDTO = new UserDTO(user_id , user_pw, user_name , user_address , user_phone , user_category, user_state);
         return userDTO;
     }
-
 }

@@ -1,6 +1,7 @@
 package control;
 
 import persistence.StatisticalInfoDTO;
+import protocol.BodyMaker;
 import protocol.Header;
 
 import java.io.DataInputStream;
@@ -12,27 +13,28 @@ import java.util.Scanner;
 
 public class StatisticsController {
 
-    public void handleStatistics(Scanner sc, DataInputStream inputStream, DataOutputStream outputStream) throws IOException {
+    public void handleStatistics(Scanner sc,int Store_id, DataInputStream inputStream, DataOutputStream outputStream) throws IOException {
 
         //시작 신호 보내기
+        BodyMaker bodyMaker_start = new BodyMaker();
+        bodyMaker_start.addIntBytes(Store_id);
+        byte[] start_Body = bodyMaker_start.getBody();
         Header startHeader = new Header(
                 Header.TYPE_START,
                 Header.CODE_STATISTICS,
-                0);
+                start_Body.length);
         outputStream.write(startHeader.getBytes());
+        outputStream.write(start_Body);
 
         // statisticalinfo DTO LIST 받기
+
         Header list_header = Header.readHeader(inputStream);
         int listSize = inputStream.readInt();
+
         List<StatisticalInfoDTO> list  = new ArrayList<StatisticalInfoDTO>();
         for(int i = 0 ; i <listSize ; i ++)
         {
-            int store_id = inputStream.readInt(); String store_name = inputStream.readUTF();
-            String menu_name = inputStream.readUTF(); long sum_order_price = inputStream.readLong();
-            int count_order = inputStream.readInt() ;
-
-            StatisticalInfoDTO statisticalInfoDTO = new StatisticalInfoDTO(store_id , store_name , menu_name , sum_order_price , count_order);
-            list.add(statisticalInfoDTO);
+            list.add(StatisticalInfoDTO.read(inputStream));
         }
 
         System.out.println("<메뉴 별 통계>");

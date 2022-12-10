@@ -107,7 +107,6 @@ public class StoreInputManager {
                     }
                     else {
                         System.out.println("입력 값이 형식에 맞지 않습니다. (00:00) ");
-                        break;
                     }
 
                 }

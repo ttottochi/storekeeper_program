@@ -29,8 +29,12 @@ public class LoginController {
     public String handleLogin(Scanner sc, DataInputStream inputStream, DataOutputStream outputStream) throws IOException {
         UserDTO loginUser;
         String user_id = "";
+
         //시작 신호 보내기
-        Header start_Header = new Header( Header.TYPE_START, Header.CODE_LOG_IN, 0);
+        Header start_Header = new Header(
+                Header.TYPE_START,
+                Header.CODE_LOG_IN,
+                0);
         outputStream.write(start_Header.getBytes());
 
         if(requestReceiver.receiveUserIDReq(inputStream)) //id 요청 받기
@@ -48,6 +52,8 @@ public class LoginController {
 
         responseSender.sendUserPWAns(sc,user_id, outputStream);
 
+        int dataLength = 0;
+
         while(true)
         {
             if(requestReceiver.receiveUserPWResult_LogInReq(inputStream)) {
@@ -58,6 +64,8 @@ public class LoginController {
             responseSender.sendUserPWAns(sc,user_id, outputStream);
         }
 
+        System.out.println("--------------------------------------");
+
         loginUser = UserDTO.read(inputStream);
 
         if(loginUser.getUser_category() != 1)
@@ -65,13 +73,19 @@ public class LoginController {
             System.out.println("해당 회원은 점주가 아닙니다. 다시 로그인해주세요.");
             return null;
         }
+
         int userStoreNum = inputStream.readInt();
 
         List<StoreDTO> userStores = new ArrayList<StoreDTO>();
-        for(int i = 0; i < userStoreNum; i++)
+
+        int i = 0;
+
+        for(; i < userStoreNum; i++)
         {
             userStores.add(StoreDTO.read(inputStream));
         }
+
+
 
         for(StoreDTO userstore : userStores)
         {
@@ -79,6 +93,6 @@ public class LoginController {
         }
         System.out.println("가게 점주");
         System.out.println(loginUser.getUser_name() + "(" + loginUser.getUser_id() + ")" + "님 로그인 되셨습니다.");
-        return loginUser.getUser_id();
+        return user_id;
     }
 }
